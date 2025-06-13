@@ -91,6 +91,12 @@
         <div class="result-box">
             <strong>Texto Alternativo Gerado:</strong>
             <p id="altTextOutput">Nenhum texto gerado ainda.</p>
+            <!-- end list -->
+             <div class="result-box">
+            <strong>Texto Alternativo Gerado:</strong>
+            <p id="altTextOutput">Nenhum texto gerado ainda.</p>
+            <button id="copyButton" style="display: none; margin-top: 10px;">Copiar Texto</button>
+        </div>
         </div>
     </div>
 
@@ -100,6 +106,7 @@
         const generateButton = document.getElementById('generateButton');
         const altTextOutput = document.getElementById('altTextOutput');
         const loadingDiv = document.getElementById('loading');
+        const copyButton = document.getElementById('copyButton');
 
         // Pré-visualiza a imagem selecionada
         imageUpload.addEventListener('change', function() {
@@ -147,15 +154,33 @@
 
                 const data = await response.json();
                 altTextOutput.textContent = data.alt_text;
+                copyButton.style.display = 'block'; // MOSTRAR BOTÃO DE COPIAR
+
+                
 
             } catch (error) {
                 console.error('Erro:', error);
                 altTextOutput.textContent = 'Ocorreu um erro: ' + error.message;
+                copyButton.style.display = 'none'; // Esconde botão em caso de erro
             } finally {
                 loadingDiv.style.display = 'none'; // Esconde o carregamento
             }
         });
+            copyButton.addEventListener('click', async () => {
+            const textToCopy = altTextOutput.textContent;
+            try {
+                await navigator.clipboard.writeText(textToCopy);
+                alert('Texto copiado para a área de transferência!');
+            } catch (err) {
+                console.error('Falha ao copiar o texto: ', err);
+                alert('Não foi possível copiar o texto. Por favor, copie manualmente.');
+            }
+        });
     </script>
-</body>
+    </div> <footer style="margin-top: 40px; text-align: center; color: #777; font-size: 0.9em;">
+        <p>&copy; 2025 Gerador de Alt Text | Desenvolvido por Alexandre Silva (Versão 1.0)</p>
+        <p>Com tecnologia Google Gemini, Flask e Python.</p>
+    </footer>
 
+</body>
 </html>
